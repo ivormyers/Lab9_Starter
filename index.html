@@ -65,29 +65,45 @@
         <button id="calculate">Calculate</button>
         <br />
         <output></output>
+       <!-- <output id = "errOpt">Error Output</output> -->
       </fieldset>
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button id="conLog">Console Log</button>
+      <button id="conErr">Console Error</button>
+      <button id="conCnt">Console Count</button>
+      <button id="conWarn">Console Warn</button>
+      <button id="conAss">Console Assert</button>
+      <button id="conClr">Console Clear</button>
+      <button id="conDir">Console Dir</button>
+      <button id="conDml">Console dirxml</button>
+      <button id="conGst">Console Group Start</button>
+      <button id="conGed">Console Group End</button>
+      <button id="conTab">Console Table</button>
+      <button id="conStm">Start Timer</button>
+      <button id="conEtm">End Timer</button>
+      <button id="conTra">Console Trace</button>
+      <button id="conTGE">Trigger a Global Error</button>
     </section>
   </main>
 
+<script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({ 
+    token: "64c39ac3f7e24a9d98887feb6dc00e0d"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
+                        
   <script>
+    class DivByZero extends Error{
+      constructor(message){
+        super(message);
+        this.name = "Divided By Zero"
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,6 +111,16 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
+      try{
+        if(secondNum == 0 && operator == '/'){
+          throw new DivByZero("Divided By Zero");
+        }
+      }catch(err){
+        console.error(err.message);
+      } finally {
+        console.log("Attempted Calculation")
+      }
+
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
@@ -102,6 +128,91 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    const conLog = document.getElementById("conLog");
+    const conErr = document.getElementById("conErr");
+    const conCnt = document.getElementById("conCnt");
+    const conWarn = document.getElementById("conWarn");
+    const conAss = document.getElementById("conAss");
+    const conClr = document.getElementById("conClr");
+    const conDir = document.getElementById("conDir");
+    const conDml = document.getElementById("conDml");
+    const conGst = document.getElementById("conGst");
+    const conGed = document.getElementById("conGed");
+    const conTab = document.getElementById("conTab");
+    const conStm = document.getElementById("conStm");
+    const conEtm = document.getElementById("conEtm");
+    const conTra = document.getElementById("conTra");
+    const conTGE = document.getElementById("conTGE");
+
+    conLog.addEventListener('click', function(){
+      console.log("log");
+    });
+
+    conErr.addEventListener('click', function(){
+      console.error("Error");
+    });
+
+    conCnt.addEventListener('click', function(){
+      console.count("Count");
+    });
+
+    conWarn.addEventListener('click', function(){
+      console.warn("Warn");
+    });
+
+    conAss.addEventListener('click', function(){
+      console.assert(1==2);
+    });
+
+    conClr.addEventListener('click', function(){
+      console.clear();
+    });
+
+    conDir.addEventListener('click', function(){
+      console.dir(errorBtns);
+    });
+
+    conDml.addEventListener('click', function(){
+      console.dirxml(errorBtns);
+    });
+
+    conGst.addEventListener('click', function(){
+      console.group("Group Start");
+    });    
+
+    conGed.addEventListener('click', function(){
+      console.groupEnd();
+    });
+
+    conTab.addEventListener('click', function(){
+      console.table(errorBtns);
+    });
+
+    conStm.addEventListener('click', function(){
+      console.time("Timer");
+    });
+
+    conEtm.addEventListener('click', function(){
+      console.timeEnd();
+    });
+
+    conTra.addEventListener('click', function(){
+      console.trace();
+    });
+
+    conTGE.addEventListener('click', function(){
+      throw new Error("GLOBAL ERROR RAAAAAA")
+    });
+
+    window.onerror = function(){
+      console.error("Global Error Catcher Be Catching");
+      return true;
+    }
+
+    
+      
+
   </script>
 </body>
 
